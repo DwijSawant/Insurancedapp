@@ -1,0 +1,27 @@
+{
+  "canisters": {
+    "insurancedapp_backend": {
+      "candid": "src/insurancedapp_backend/insurancedapp_backend.did",
+      "package": "insurancedapp_backend",
+      "type": "rust"
+    },
+    "insurancedapp_frontend": {
+      "dependencies": [
+        "insurancedapp_backend"
+      ],
+      "source": [
+        "src/insurancedapp_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "insurancedapp_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
