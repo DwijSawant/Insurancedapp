@@ -1,46 +1,31 @@
-import React from "react";
-import { Helmet } from "react-helmet";
+import { useState } from 'react';
+import { insurancedapp_backend } from 'declarations/insurancedapp_backend';
 
 function App() {
+  const [greeting, setGreeting] = useState('');
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const name = event.target.elements.name.value;
+    insurancedapp_backend.greet(name).then((greeting) => {
+      setGreeting(greeting);
+    });
+    return false;
+  }
+
   return (
-    <>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <meta
-          name="viewport"
-          content="width=device-width,initial-scale=1,user-scalable=no"
-        />
-        <meta name="theme-color" content="#000000" />
-        <meta name="robots" content="noindex" />
-        <link rel="shortcut icon" sizes="16x16" href="/favicon.png" />
-        <link rel="shortcut icon" sizes="32x32" href="/favicon@2x.png" />
-        <title>Framer Login</title>
-        <script>
-          {`window.onpageshow = function(event) {
-              if (event.persisted) {
-                window.location.reload();
-              }
-            }`}
-        </script>
-        <script>
-          {`window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-              'gtm.start': new Date().getTime(),
-              event: 'gtm.js'
-            });`}
-        </script>
-        <script async src="https://analytics.framer.com/gtm.js?id=GTM-T3KPVJR"></script>
-        <script src="https://framer.com/env.js" defer></script>
-        <script src="https://framer.com/static/js/main.5719546b.js" defer></script>
-      </Helmet>
-      <noscript>You need to enable JavaScript to run this app.</noscript>
-      <div id="root">
-        {/* Your actual React UI goes here */}
-      </div>
-    </>
+    <main>
+      <img src="/logo2.svg" alt="DFINITY logo" />
+      <br />
+      <br />
+      <form action="#" onSubmit={handleSubmit}>
+        <label htmlFor="name">Enter your name: &nbsp;</label>
+        <input id="name" alt="Name" type="text" />
+        <button type="submit">Click Me!</button>
+      </form>
+      <section id="greeting">{greeting}</section>
+    </main>
   );
 }
-
-// DNS ON CANISTERS DOSENT WORK !!!
 
 export default App;
