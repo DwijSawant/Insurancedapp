@@ -1,3 +1,35 @@
+type Claim = record {
+  id: nat64;
+  description: text;
+  approvals: nat64;
+  total_votes: nat64;
+  executed: bool;
+};
+
+type Validator = record {
+  stake: nat64;
+  has_voted_for: vec nat64;
+};
+
+type Subscriber = record {
+  name: text;
+  subscribed: bool;
+  last_payment_timestamp: nat64;
+};
+
+type Investor = record {
+  name: text;
+  invested_amount: nat64;
+};
+
 service : {
-    "greet": (text) -> (text) query;
-}
+  register_validator: (text, nat64) -> ();
+  submit_claim: (text) -> (nat64);
+  vote_on_claim: (text, nat64, bool) -> ();
+  subscribe: (text, nat64) -> ();
+  invest: (text, nat64) -> ();
+
+  get_claims: () -> (vec Claim) query;
+  get_subscribers: () -> (vec Subscriber) query;
+  get_investors: () -> (vec Investor) query;
+};
