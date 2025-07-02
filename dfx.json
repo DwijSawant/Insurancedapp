@@ -1,20 +1,5 @@
 {
   "canisters": {
-    "insurancedapp_backend": {
-      "candid": "src/insurancedapp_backend/insurancedapp_backend.did",
-      "package": "insurancedapp_backend",
-      "type": "rust"
-    },
-    "insurancedapp_frontend": {
-      "dependencies": [
-        "insurancedapp_backend"
-      ],
-      "source": [
-        "src/insurancedapp_frontend/dist"
-      ],
-      "type": "assets",
-      "workspace": "insurancedapp_frontend"
-    },
     "internet_identity": {
       "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
       "frontend": {},
@@ -25,6 +10,21 @@
       },
       "type": "custom",
       "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
+    },
+    "testinsurapp_backend": {
+      "candid": "src/testinsurapp_backend/testinsurapp_backend.did",
+      "package": "testinsurapp_backend",
+      "type": "rust"
+    },
+    "testinsurapp_frontend": {
+      "dependencies": [
+        "testinsurapp_backend"
+      ],
+      "source": [
+        "src/testinsurapp_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "testinsurapp_frontend"
     }
   },
   "defaults": {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { insurancedapp_backend } from 'declarations/insurancedapp_backend';
+import { testinsurapp_backend } from 'declarations/testinsurapp_backend';
 
 function App() {
   const [greeting, setGreeting] = useState('');
@@ -7,7 +7,7 @@ function App() {
   function handleSubmit(event) {
     event.preventDefault();
     const name = event.target.elements.name.value;
-    insurancedapp_backend.greet(name).then((greeting) => {
+    testinsurapp_backend.greet(name).then((greeting) => {
       setGreeting(greeting);
     });
     return false;
