@@ -1,5 +1,5 @@
 [workspace]
 members = [
-    "src/testinsurapp_backend"
+    "src/nigga_backend"
 ]
 resolver = "2"

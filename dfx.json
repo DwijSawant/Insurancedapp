@@ -11,20 +11,20 @@
       "type": "custom",
       "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
     },
-    "testinsurapp_backend": {
-      "candid": "src/testinsurapp_backend/testinsurapp_backend.did",
-      "package": "testinsurapp_backend",
+    "nigga_backend": {
+      "candid": "src/nigga_backend/nigga_backend.did",
+      "package": "nigga_backend",
       "type": "rust"
     },
-    "testinsurapp_frontend": {
+    "nigga_frontend": {
       "dependencies": [
-        "testinsurapp_backend"
+        "nigga_backend"
       ],
       "source": [
-        "src/testinsurapp_frontend/dist"
+        "src/nigga_frontend/dist"
       ],
       "type": "assets",
-      "workspace": "testinsurapp_frontend"
+      "workspace": "nigga_frontend"
     }
   },
   "defaults": {
@@ -36,3 +36,5 @@
   "output_env_file": ".env",
   "version": 1
 }
+
+

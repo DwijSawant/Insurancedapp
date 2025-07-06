@@ -4,7 +4,7 @@ type Claim = record {
   approvals: nat64;
   total_votes: nat64;
   executed: bool;
-  recipient: text;
+  recipient: principal;
   amount: nat64;
 };
 
@@ -14,27 +14,24 @@ type Validator = record {
 };
 
 type Subscriber = record {
-  id: text;
+  id: principal;
   subscribed: bool;
   last_payment_timestamp: nat64;
+  amount_paid: nat64;
 };
 
 type Investor = record {
-  id: text;
+  id: principal;
   invested_amount: nat64;
 };
 
 service : {
-  deposit_tokens: (nat64) -> ();
-  get_balance: () -> (nat64) query;
   register_validator: () -> ();
+  invest: (nat64) -> ();
+  subscribe: (nat64, nat64) -> ();
   submit_claim: (text, nat64) -> (nat64);
   vote_on_claim: (nat64, bool) -> ();
-  subscribe: (nat64) -> ();
-  invest: (nat64) -> ();
-
   get_claims: () -> (vec Claim) query;
   get_subscribers: () -> (vec Subscriber) query;
   get_investors: () -> (vec Investor) query;
-  get_contract_balance: () -> (nat64) query;
 }
