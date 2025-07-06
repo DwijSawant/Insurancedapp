@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { nigga_backend } from 'declarations/nigga_backend';
+import { insurancedapp_backend } from 'declarations/insurancedapp_backend';
 
 function App() {
   const [greeting, setGreeting] = useState('');
@@ -7,7 +7,7 @@ function App() {
   function handleSubmit(event) {
     event.preventDefault();
     const name = event.target.elements.name.value;
-    nigga_backend.greet(name).then((greeting) => {
+    insurancedapp_backend.greet(name).then((greeting) => {
       setGreeting(greeting);
     });
     return false;
