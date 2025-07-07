@@ -1,5 +1,20 @@
 {
   "canisters": {
+    "insurancedapp_backend": {
+      "candid": "src/insurancedapp_backend/insurancedapp_backend.did",
+      "package": "insurancedapp_backend",
+      "type": "rust"
+    },
+    "insurancedapp_frontend": {
+      "dependencies": [
+        "insurancedapp_backend"
+      ],
+      "source": [
+        "src/insurancedapp_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "insurancedapp_frontend"
+    },
     "internet_identity": {
       "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
       "frontend": {},
@@ -10,21 +25,6 @@
       },
       "type": "custom",
       "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
-    },
-    "nigga_backend": {
-      "candid": "src/nigga_backend/nigga_backend.did",
-      "package": "nigga_backend",
-      "type": "rust"
-    },
-    "nigga_frontend": {
-      "dependencies": [
-        "nigga_backend"
-      ],
-      "source": [
-        "src/nigga_frontend/dist"
-      ],
-      "type": "assets",
-      "workspace": "nigga_frontend"
     }
   },
   "defaults": {
@@ -36,5 +36,3 @@
   "output_env_file": ".env",
   "version": 1
 }
-
-

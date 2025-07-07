@@ -1,10 +1,10 @@
 {
-  "name": "nigga_frontend",
+  "name": "insurancedapp_frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "setup": "npm i && dfx canister create nigga_backend && dfx generate nigga_backend && dfx deploy",
+    "setup": "npm i && dfx canister create insurancedapp_backend && dfx generate insurancedapp_backend && dfx deploy",
     "start": "vite --port 3000",
     "prebuild": "dfx generate",
     "build": "tsc && vite build",

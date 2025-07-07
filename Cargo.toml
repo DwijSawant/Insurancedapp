@@ -1,5 +1,5 @@
 [workspace]
 members = [
-    "src/nigga_backend"
+    "src/insurancedapp_backend"
 ]
 resolver = "2"
