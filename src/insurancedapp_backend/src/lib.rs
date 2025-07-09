@@ -54,7 +54,7 @@ pub async fn icp_transfer(
     memo: Option<Vec<u8>>,
     amount: NumTokens,
 ) -> Result<BlockIndex, String> {
-    const ICP_LEDGER_CANISTER_ID: &str = "ryjl3-tyaaa-aaaaa-aaaba-cai";
+    const ICP_LEDGER_CANISTER_ID: &str = "ryjl3-tyaaa-aaaaa-aaaba-cai"; //local deployed ledger change it to mainnet before using on mainnet
     let icp_ledger = Principal::from_text(ICP_LEDGER_CANISTER_ID).unwrap();
     let args = TransferArg {
         memo: memo.map(IcrcMemo::from),

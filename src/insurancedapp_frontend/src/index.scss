@@ -1,41 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
 body {
-  font-family: sans-serif;
-  font-size: 1.5rem;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-img {
-  max-width: 50vw;
-  max-height: 25vw;
-  display: block;
-  margin: auto;
+@layer base {
+  :root {
+    --background: 197 100% 94.1%;
+    --foreground: 224 71.4% 4.1%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 197 76% 53%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 197 100% 90%;
+    --secondary-foreground: 197 76% 30%;
+    --muted: 197 50% 90%;
+    --muted-foreground: 224 71.4% 4.1%;
+    --accent: 174 63% 40%;
+    --accent-foreground: 174 63% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 197 20% 80%;
+    --input: 197 20% 85%;
+    --ring: 197 76% 53%;
+    --chart-1: 197 76% 53%;
+    --chart-2: 174 63% 40%;
+    --chart-3: 197 76% 65%;
+    --chart-4: 174 63% 55%;
+    --chart-5: 197 76% 40%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 210 20% 98%;
+    --card: 222 47% 11%;
+    --card-foreground: 210 20% 98%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 197 76% 53%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 215 28% 17%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 28% 17%;
+    --muted-foreground: 218 18% 69%;
+    --accent: 174 63% 40%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 215 28% 17%;
+    --input: 215 28% 17%;
+    --ring: 197 76% 53%;
+    --chart-1: 197 76% 53%;
+    --chart-2: 174 63% 40%;
+    --chart-3: 197 76% 65%;
+    --chart-4: 174 63% 55%;
+    --chart-5: 197 76% 40%;
+  }
 }
 
-form {
-  display: flex;
-  justify-content: center;
-  gap: 0.5em;
-  flex-flow: row wrap;
-  max-width: 40vw;
-  margin: auto;
-  align-items: baseline;
-}
-
-button[type="submit"] {
-  padding: 5px 20px;
-  margin: 10px auto;
-  float: right;
-}
-
-#greeting {
-  margin: 10px auto;
-  padding: 10px 60px;
-  border: 1px solid #222;
-}
-
-#greeting:empty {
-  display: none;
-}
-
-.browser-warning {
-  display: none;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
