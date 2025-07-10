@@ -18,7 +18,7 @@
     "types": ["vite/client", "tailwindcss"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
     }
   },
   "include": ["src"]

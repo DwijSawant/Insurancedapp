@@ -3,6 +3,9 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { insurancedapp_backend } from '../../../declarations/insurancedapp_backend';
+import { AuthClient } from "@dfinity/auth-client";
+import { HttpAgent } from "@dfinity/agent";
 import {
   Dialog,
   DialogContent,
@@ -23,21 +26,22 @@ type ValidatorListProps = {
 };
 
 export function ValidatorList({ userStatus, setUserStatus }: ValidatorListProps) {
-  const [stake, setStake] = useState('10000');
   const [open, setOpen] = useState(false);
 
-  const handleStake = () => {
-    const stakeAmount = parseInt(stake, 10);
-    if (!isNaN(stakeAmount) && stakeAmount > 0) {
+  const handleStake = async () => {
+    try {
+      await insurancedapp_backend.register_validator(); // backend call
       setUserStatus(prev => ({
         ...prev,
         isValidator: true,
-        stakedAmount: stakeAmount,
+        stakedAmount: 100,
       }));
       setOpen(false);
+    } catch (error) {
+      console.error("Failed to register as validator:", error);
+      alert("Already registered or error occurred.");
     }
   };
-
   if (userStatus.isValidator) {
     return (
       <Card>
@@ -65,23 +69,9 @@ export function ValidatorList({ userStatus, setUserStatus }: ValidatorListProps)
             <DialogHeader>
               <DialogTitle>Become a Validator</DialogTitle>
               <DialogDescription>
-                Stake your assets to help secure the network and earn rewards.
+                Stake $100 to help secure the network and earn rewards. Click confirm to become a validator.
               </DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="stake" className="text-right">
-                  Stake Amount
-                </Label>
-                <Input
-                  id="stake"
-                  value={stake}
-                  onChange={(e) => setStake(e.target.value)}
-                  className="col-span-3"
-                  type="number"
-                />
-              </div>
-            </div>
             <DialogFooter>
               <Button type="button" onClick={handleStake}>Confirm Stake</Button>
             </DialogFooter>

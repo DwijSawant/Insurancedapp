@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { CheckCircle, DollarSign, FileText, User, XCircle } from 'lucide-react';
-
+import { insurancedapp_backend } from '../../../declarations/insurancedapp_backend';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -11,13 +11,21 @@ export function ClaimCard({ claim: initialClaim }: { claim: Claim }) {
   const [claim, setClaim] = useState(initialClaim);
   const [voted, setVoted] = useState<'approved' | 'rejected' | null>(null);
 
-  const handleVote = (vote: 'approved' | 'rejected') => {
-    setVoted(vote);
-    setClaim(prev => ({
-      ...prev,
-      status: vote === 'approved' ? 'Approved' : 'Rejected',
-    }));
+  const handleVote = async (vote: 'approved' | 'rejected') => {
+    try {
+      await insurancedapp_backend.vote_on_claim(BigInt(claim.id), vote === 'approved');
+    
+      setVoted(vote);
+      setClaim(prev => ({
+        ...prev,
+        status: vote === 'approved' ? 'Approved' : 'Rejected',
+      }));
+    } catch (error) {
+      console.error("Voting failed:", error);
+      alert("Voting failed. Maybe already voted or not a validator.");
+    }
   };
+
 
   const getStatusVariant = (status: string) => {
     switch (status) {

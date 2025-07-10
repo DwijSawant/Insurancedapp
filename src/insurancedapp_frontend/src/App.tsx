@@ -8,7 +8,14 @@ import { ClaimsList } from '@/components/claims-list';
 import { Button } from '@/components/ui/button';
 import { ShieldCheck } from 'lucide-react';
 import type { UserStatus } from '@/lib/types';
+import type { Claim } from '@/lib/data';
+import { claims as initialClaims } from '@/lib/data';
+import { AuthClient } from "@dfinity/auth-client";
+import { HttpAgent } from "@dfinity/agent";
+import { Identity } from '@dfinity/agent';
 import '@/index.scss';
+
+
 
 const initialUserStatus: UserStatus = {
   isLoggedIn: false,
@@ -20,14 +27,48 @@ const initialUserStatus: UserStatus = {
 };
 
 export default function App() {
+  const [authClient, setAuthClient] = useState<AuthClient | null>(null);
+  const [identity, setIdentity] = useState<Identity | null>(null);
   const [userStatus, setUserStatus] = useState<UserStatus>(initialUserStatus);
+  const [claims, setClaims] = useState<Claim[]>(initialClaims);
 
-  const handleLoginToggle = (loggedIn: boolean) => {
+  const handleLoginToggle = async (loggedIn: boolean) => {
     if (loggedIn) {
-      setUserStatus(prev => ({ ...prev, isLoggedIn: true }));
+      const client = await AuthClient.create();
+      await client.login({
+        identityProvider: "https://identity.ic0.app/#authorize",
+        onSuccess: async () => {
+          const identity = client.getIdentity();
+          setIdentity(identity);
+          setAuthClient(client);
+          setUserStatus(prev => ({ ...prev, isLoggedIn: true }));
+        },
+        onError: (err) => {
+          console.error("Login failed", err);
+        }
+      });
     } else {
+      if (authClient) {
+        await authClient.logout();
+      }
+      setIdentity(null);
+      setAuthClient(null);
       setUserStatus(initialUserStatus);
+      setClaims(initialClaims);
     }
+  };
+
+
+  const handleAddClaim = (newClaim: Omit<Claim, 'id' | 'status' | 'recipient'>) => {
+    setClaims(prevClaims => [
+      {
+        ...newClaim,
+        id: prevClaims.length + 1,
+        status: 'Pending',
+        recipient: 'Current User', // Placeholder for actual user data
+      },
+      ...prevClaims,
+    ]);
   };
 
   return (
@@ -35,7 +76,7 @@ export default function App() {
       <Header isLoggedIn={userStatus.isLoggedIn} onLoginToggle={handleLoginToggle} />
       <main className="flex-1 flex flex-col items-center justify-center animate-in fade-in duration-500">
         {userStatus.isLoggedIn ? (
-          <Dashboard userStatus={userStatus} setUserStatus={setUserStatus} />
+          <Dashboard userStatus={userStatus} setUserStatus={setUserStatus} claims={claims} onAddClaim={handleAddClaim} />          
         ) : (
           <Landing onLogin={() => handleLoginToggle(true)} />
         )}
@@ -59,7 +100,19 @@ const Landing = ({ onLogin }: { onLogin: () => void }) => (
 );
 
 
-const Dashboard = ({ userStatus, setUserStatus }: { userStatus: UserStatus; setUserStatus: React.Dispatch<React.SetStateAction<UserStatus>> }) => (
+
+
+const Dashboard = ({
+  userStatus,
+  setUserStatus,
+  claims,
+  onAddClaim
+}: {
+  userStatus: UserStatus;
+  setUserStatus: React.Dispatch<React.SetStateAction<UserStatus>>;
+  claims: Claim[];
+  onAddClaim: (newClaim: Omit<Claim, 'id' | 'status' | 'recipient'>) => void;
+}) => (
   <div className="container mx-auto p-4 sm:p-6 lg:p-8 w-full">
      <h1 className="font-headline text-3xl font-bold mb-4">Dashboard</h1>
     <Tabs defaultValue={userStatus.isValidator ? "claims" : "validators"} className="w-full">
@@ -71,14 +124,14 @@ const Dashboard = ({ userStatus, setUserStatus }: { userStatus: UserStatus; setU
       </TabsList>
       {userStatus.isValidator && (
         <TabsContent value="claims" className="mt-6">
-          <ClaimsList />
+          <ClaimsList claims={claims} />
         </TabsContent>
       )}
       <TabsContent value="validators" className="mt-6">
         <ValidatorList userStatus={userStatus} setUserStatus={setUserStatus} />
       </TabsContent>
       <TabsContent value="subscribers" className="mt-6">
-        <SubscriberList userStatus={userStatus} setUserStatus={setUserStatus} />
+        <SubscriberList userStatus={userStatus} setUserStatus={setUserStatus} onAddClaim={onAddClaim} />
       </TabsContent>
       <TabsContent value="investors" className="mt-6">
         <InvestorList userStatus={userStatus} setUserStatus={setUserStatus} />

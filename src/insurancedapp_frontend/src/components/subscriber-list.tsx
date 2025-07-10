@@ -3,6 +3,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { insurancedapp_backend } from '../../../declarations/insurancedapp_backend';
 import {
   Dialog,
   DialogContent,
@@ -11,35 +12,95 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from '@/components/ui/dialog';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import type { UserStatus } from '@/lib/types';
+import type { Claim } from '@/lib/data';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { CheckCircle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 type SubscriberListProps = {
   userStatus: UserStatus;
   setUserStatus: React.Dispatch<React.SetStateAction<UserStatus>>;
+  onAddClaim: (newClaim: Omit<Claim, 'id' | 'status' | 'recipient'>) => void;
 };
 
-export function SubscriberList({ userStatus, setUserStatus }: SubscriberListProps) {
+export function SubscriberList({ userStatus, setUserStatus, onAddClaim }: SubscriberListProps) {
   const [subscribeOpen, setSubscribeOpen] = useState(false);
+  const [claimOpen, setClaimOpen] = useState(false);
+  const [claimAmount, setClaimAmount] = useState('1000');
+  const [claimDescription, setClaimDescription] = useState('');
+  const { toast } = useToast();
 
-  const handleSubscribe = () => {
-    setUserStatus(prev => ({
-      ...prev,
-      isSubscriber: true,
-    }));
-    setSubscribeOpen(false);
+  const handleSubscribe = async () => {
+    try {
+      const amount = 100; // hardcoded or dynamic if needed
+      const timestamp = BigInt(Date.now());
+      await insurancedapp_backend.subscribe(BigInt(amount), timestamp);
+
+      setUserStatus(prev => ({
+        ...prev,
+        isSubscriber: true,
+      }));
+      setSubscribeOpen(false);
+    } catch (e) {
+      console.error("Subscription failed:", e);
+      alert("Subscription failed. See console for details.");
+    }
+  };
+
+  const handleClaimSubmit = async () => {
+    const amount = parseInt(claimAmount, 10);
+    if (isNaN(amount) || amount <= 0) {
+      toast({
+        title: "Invalid Amount",
+        description: "Please enter a valid claim amount.",
+        variant: "destructive",
+      });
+      return;
+    }
+    if (!claimDescription.trim()) {
+      toast({
+        title: "Missing Description",
+        description: "Please provide a description for your claim.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      await insurancedapp_backend.submit_claim(claimDescription, BigInt(amount));
+    
+    // You can still keep local state for UI purposes
+      onAddClaim({ amount, description: claimDescription });
+
+      toast({
+        title: "Claim Submitted",
+        description: "Your claim has been submitted for review.",
+      });
+
+      setClaimAmount('1000');
+      setClaimDescription('');
+      setClaimOpen(false);
+    } catch (e) {
+      console.error("Claim submission failed:", e);
+      toast({
+        title: "Submission Failed",
+        description: "An error occurred while submitting the claim.",
+        variant: "destructive",
+      });
+    }
   };
   
   return (
     <div>
       <div className="flex justify-end mb-4 gap-2">
         {userStatus.isSubscriber ? (
-          <Dialog>
+          <Dialog open={claimOpen} onOpenChange={setClaimOpen}>
             <DialogTrigger asChild>
               <Button>Raise a Claim</Button>
             </DialogTrigger>
@@ -58,7 +119,8 @@ export function SubscriberList({ userStatus, setUserStatus }: SubscriberListProp
                   </Label>
                   <Input
                     id="claim-amount"
-                    defaultValue="1000"
+                    value={claimAmount}
+                    onChange={(e) => setClaimAmount(e.target.value)}
                     className="col-span-3"
                     type="number"
                   />
@@ -72,13 +134,18 @@ export function SubscriberList({ userStatus, setUserStatus }: SubscriberListProp
                   </Label>
                   <Textarea
                     id="claim-description"
+                    value={claimDescription}
+                    onChange={(e) => setClaimDescription(e.target.value)}
                     placeholder="Please describe your claim in detail."
                     className="col-span-3"
                   />
                 </div>
               </div>
               <DialogFooter>
-                <Button type="submit">Submit Claim</Button>
+                 <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                </DialogClose>
+                <Button type="button" onClick={handleClaimSubmit}>Submit Claim</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>

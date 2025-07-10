@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from './ui/button';
+import { insurancedapp_backend } from '../../../declarations/insurancedapp_backend';
 import {
   Dialog,
   DialogContent,
@@ -23,15 +24,24 @@ export function InvestorList({ userStatus, setUserStatus }: InvestorListProps) {
   const [investment, setInvestment] = useState('10000');
   const [open, setOpen] = useState(false);
 
-  const handleInvest = () => {
-    const investmentAmount = parseInt(investment, 10);
-    if (!isNaN(investmentAmount) && investmentAmount > 0) {
-      setUserStatus(prev => ({
-        ...prev,
-        isInvestor: true,
-        investedAmount: (prev.investedAmount || 0) + investmentAmount,
-      }));
-      setOpen(false);
+  const handleInvest = async () => {
+    const amount = parseInt(investment, 10);
+
+    if (!isNaN(amount) && amount > 0) {
+      try {
+        await insurancedapp_backend.invest(BigInt(amount));
+        setUserStatus(prev => ({
+          ...prev,
+          isInvestor: true,
+          investedAmount: (prev.investedAmount || 0) + amount,
+        }));
+        setOpen(false);
+      } catch (e) {
+        console.error("Investment failed:", e);
+        alert("Investment failed. Check console.");
+      }
+    } else {
+      alert("Please enter a valid amount.");
     }
   };
 
