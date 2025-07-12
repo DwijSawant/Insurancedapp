@@ -1,8 +1,55 @@
-# `insurancedapp`
+# 🛡️ SecureLeap
 
-Welcome to your new `insurancedapp` project and to the Internet Computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
+SecureLeap is a decentralized insurance platform built on the Internet Computer Protocol (ICP), empowering users with transparent, trustless, and community-driven coverage. It combines investor funding, validator governance, and insured user interaction through an on-chain dApp.
 
-To get started, you might want to explore the project directory structure and the default configuration file. Working with this project in your development environment will not affect any production deployment or identity tokens.
+![Architecture](./fa91b512-3d31-4be5-86d9-51f6b2da39ed.png)
+
+---
+
+## ⚙️ Features
+
+- **Internet Identity Authentication**  
+  Secure login using Internet Identity.
+
+- **Validator System (DAO-Like Voting)**  
+  Validators stake ICP and vote on insurance claims. Claims get executed when 51% approval is reached.
+
+- **Subscription-Based Insurance**  
+  Users subscribe to the platform monthly, contributing to the **Insurance Pool**.
+
+- **Claim Submission & Voting**  
+  Users can submit claims; validators vote to approve/disapprove based on majority consensus.
+
+- **Investor Incentives**  
+  Investors provide liquidity to the **%APY Pool**, earning returns from unused insurance funds.
+
+- **Smart Claim Verification**  
+  Claims are only processed if approved by community governance.
+
+---
+
+## 💰 Token Flow
+
+- **Insurance Pool:** Receives subscription payments.
+- **APY Pool:** Funded by investors and gains from unclaimed insurance premiums.
+- **Proof of Verification:** Claims are verified through validator consensus.
+- **Subscription Flow:**  
+  - Monthly fee `X`
+  - Final pool = `X * 1.5`
+  - Must ensure 60% of the pool remains for sustainability
+
+---
+
+## 🧱 Tech Stack
+
+- **Frontend:** React + TailwindCSS
+- **Backend:** Motoko / Rust (IC Canisters)
+- **Authentication:** Internet Identity
+- **ICP Ledger:** Used for payments, staking, and claim settlements
+- **Canister Communication:** Via `dfx` and `@dfinity/agent`
+
+---
+
 
 To learn more before you start working with `insurancedapp`, see the following documentation available online:
 
