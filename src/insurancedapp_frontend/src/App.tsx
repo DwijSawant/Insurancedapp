@@ -36,7 +36,7 @@ export default function App() {
     if (loggedIn) {
       const client = await AuthClient.create();
       await client.login({
-        identityProvider: "https://identity.ic0.app/#authorize",
+        identityProvider: "https://identity.ic0.app/#authorize",  //CHECK THIS FOR LOCAL DEPLOYMENT LEDGER 
         onSuccess: async () => {
           const identity = client.getIdentity();
           setIdentity(identity);

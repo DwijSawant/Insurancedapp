@@ -7,6 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import type { Claim } from '@/lib/data';
 
+
+// Claim frontend with voting functionality 
 export function ClaimCard({ claim: initialClaim }: { claim: Claim }) {
   const [claim, setClaim] = useState(initialClaim);
   const [voted, setVoted] = useState<'approved' | 'rejected' | null>(null);

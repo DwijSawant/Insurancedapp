@@ -7,6 +7,9 @@ use icrc_ledger_types::icrc1::account::{Account, Subaccount as IcrcSubaccount};
 use icrc_ledger_types::icrc1::transfer::{BlockIndex, Memo as IcrcMemo, NumTokens, TransferArg, TransferError as IcrcTransferError};
 use ic_cdk::call::{Call, CallErrorExt};
 
+
+
+//Define universal data structures for all types of function
 #[derive(CandidType, Deserialize, Clone)]
 pub struct Claim {
     pub id: u64,
@@ -18,12 +21,16 @@ pub struct Claim {
     pub amount: u64,
 }
 
+
+// declaring validator struct
 #[derive(CandidType, Deserialize, Clone)]
 pub struct Validator {
     pub stake: u64,
     pub has_voted_for: Vec<u64>,
 }
 
+
+//declaring subscriber struct
 #[derive(CandidType, Deserialize, Clone)]
 pub struct Subscriber {
     pub id: Principal,
@@ -32,6 +39,8 @@ pub struct Subscriber {
     pub amount_paid: u64,
 }
 
+
+//declaring investor struct
 #[derive(CandidType, Deserialize, Clone)]
 pub struct Investor {
     pub id: Principal,
@@ -47,7 +56,7 @@ thread_local! {
 }
 
 
-
+//transaction function for icp
 pub async fn icp_transfer(
     from_subaccount: Option<IcrcSubaccount>,
     to: Account,
@@ -79,9 +88,14 @@ pub async fn icp_transfer(
     }
 }
 
+
+//initialilse init
 #[init]
 fn init() {}
 
+
+
+//input funct for validator registration
 #[update]
 async fn register_validator() {
     const STAKE_AMOUNT: u64 = 100;
@@ -109,6 +123,8 @@ async fn register_validator() {
     }
 }
 
+
+//input function for investor registration
 #[update]
 async fn invest(amount: u64) {
     let caller_id = caller();
@@ -132,6 +148,8 @@ async fn invest(amount: u64) {
     }
 }
 
+
+//input function for subscription
 #[update]
 async fn subscribe(amount: u64, timestamp: u64) {
     let caller_id = caller();
@@ -155,6 +173,8 @@ async fn subscribe(amount: u64, timestamp: u64) {
     }
 }
 
+
+//input function for raising claim for subscribers
 #[update]
 fn submit_claim(description: String, amount: u64) -> u64 {
     let recipient = caller();
@@ -180,6 +200,9 @@ fn submit_claim(description: String, amount: u64) -> u64 {
     claim_id
 }
 
+
+
+//function for validators to vote on the claims raised by subscribers 
 #[update]
 async fn vote_on_claim(claim_id: u64, approve: bool) {
     let caller_id = caller();
@@ -245,16 +268,24 @@ async fn vote_on_claim(claim_id: u64, approve: bool) {
     }
 }
 
+
+
+
+//query function for getting all claims
 #[query]
 fn get_claims() -> Vec<Claim> {
     CLAIMS.with(|c| c.borrow().values().cloned().collect())
 }
 
+
+//query fuction for subscribers
 #[query]
 fn get_subscribers() -> Vec<Subscriber> {
     SUBSCRIBERS.with(|s| s.borrow().values().cloned().collect())
 }
 
+
+//query function for investors
 #[query]
 fn get_investors() -> Vec<Investor> {
     INVESTORS.with(|i| i.borrow().values().cloned().collect())

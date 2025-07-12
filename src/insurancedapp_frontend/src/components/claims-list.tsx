@@ -4,6 +4,8 @@
 import { Claim } from '@/lib/data';
 import { ClaimCard } from './claim-card';
 
+
+//registry fr demo backend list
 type ClaimsListProps = {
   claims: Claim[];
 };
